@@ -34,8 +34,6 @@ const getGames = async (req, res) => {
         const apiResponse = await getGamesFromAPI(season, league);
         const games = apiResponse.response;
         console.log("Api Response",apiResponse);
-
-
         res.json(games);
        
     } catch (error) {

@@ -10,7 +10,7 @@ const gameSchema = new mongoose.Schema({
   timezone: { type: String},
   stage: { type: String , default: null},
   week: { type: String , default: null},
-  
+  venue:{ type: String , default: null},
   status: {
     long: { type: String },
     short: { type: String },
