@@ -2,8 +2,10 @@ require('dotenv').config();
 const axios = require('axios');
 const gamesModel = require('../models/game.model.js');
 
+
+
 const getGamesFromAPI = async (season, league) => {
-    const rapidapiurl = 'https://api-basketball.p.rapidapi.com/games?season=2021-2022&league=12';
+    const rapidapiurl = 'https://api-basketball.p.rapidapi.com/games?season=2024-2025&league=12';
     const headers = {
         'x-rapidapi-key': process.env.RAPIDAPI_KEY,
         'x-rapidapi-host': process.env.RAPIDAPI_HOST
@@ -180,5 +182,19 @@ const fetchData = async (req, res) => {
 
 
 
+// Get last update time of the games
+const getLastUpdatedGame = async (req, res) => {
+    try {
+        const latestGame = await gamesModel.findOne().sort({ updatedAt: -1 });
+        if (latestGame) {
+            res.json({ lastUpdated: latestGame.updatedAt });
+        } else {
+            res.json({ lastUpdated: null });
+        }
+    } catch (error) {
+        console.error('Error fetching last update time for games:', error);
+        res.status(500).send('Error fetching last update time for games');
+    }
+};
 
-module.exports = { getGamesFromAPI ,  getGames , saveGames , postData , fetchData};
+module.exports = { getGamesFromAPI, getGames, saveGames, postData, fetchData, getLastUpdatedGame };

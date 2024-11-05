@@ -11,6 +11,7 @@ const {gamesRoute} = require('./routes/games.route.js');
 const { authRoute } = require('./routes/auth.route.js');
 const {streamRoute} = require('./routes/stream.route.js');
 const { h2hRoute } = require('./routes/h2h.route.js');
+const { userRoute } = require('./routes/user.route.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,10 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.get('/',(req,resp)=>{
-    resp.send("Welcome mian g")
 
-})
 app.use("/standings",standingsRoute)
 
 app.use("/games",gamesRoute)
@@ -47,6 +45,8 @@ app.use('/auth' , authRoute )
 app.use('/stream', streamRoute )
 
 app.use('/h2h' , h2hRoute)
+
+app.use('/user' , userRoute)
 
 
 mongoose

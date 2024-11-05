@@ -85,7 +85,14 @@ const fetchData = async (req, res) => {
     }
 };
 
+const getLastUpdatedH2h = async (req, res) => {
+    try {
+        const latestH2h = await h2hModel.findOne().sort({ updatedAt: -1 });
+        res.json({ lastUpdated: latestH2h ? latestH2h.updatedAt : null });
+    } catch (error) {
+        res.status(500).send('Error fetching last update time for h2h');
+    }
+};
 
 
-
-module.exports = {  getH2h ,  postData , fetchData};
+module.exports = {  getH2h ,  postData , fetchData, getLastUpdatedH2h};

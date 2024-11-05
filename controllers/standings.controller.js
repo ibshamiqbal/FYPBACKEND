@@ -182,5 +182,16 @@ const fetchData = async (req, res) => {
 
 
 
+// Fetch the latest updated time of standings
+const getLastUpdatedStandings = async (req, res) => {
+    try {
+        const latestStandings = await standingsModel.findOne().sort({ updatedAt: -1 });
+        console.log("stadnsdnsan ",latestStandings)
+        res.json({ lastUpdated: latestStandings ? latestStandings.updatedAt : null });
+    } catch (error) {
+        console.error('Error fetching last update time for standings:', error);
+        res.status(500).send('Error fetching last update time for standings');
+    }
+};
 
-module.exports = { getStandings, getStandingsFromAPI, saveStandings , postData ,fetchData };
+module.exports = { getStandings,getLastUpdatedStandings, getStandingsFromAPI, saveStandings , postData ,fetchData };
