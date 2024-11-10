@@ -14,7 +14,7 @@ const getGamesFromAPI = async (season, league) => {
     try {
         const response = await axios.get(rapidapiurl, { headers });
         console.log(JSON.stringify(response.data));
-        return response.data
+        return response.data;
     } catch (error) {
         console.error('Error fetching standings:', error);
         throw error;

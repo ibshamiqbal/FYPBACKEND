@@ -9,21 +9,37 @@ app.use(bodyParser.json()); // This allows Express to parse JSON requests
 const PlayerStats = require('../models/player.model.js'); // Assuming your PlayerStats model is in this file
 
 // Function to get Player Stats from API
+const https = require('https');
+
 const getPlayerStatsFromAPI = async (playerId) => {
     const rapidapiurl = `https://tank01-fantasy-stats.p.rapidapi.com/getNBAPlayerInfo?playerName=smith&statsToGet=averages`;
-    const headers = {
-        'x-rapidapi-key': process.env.API_KEY,
-        'x-rapidapi-host': process.env.API_HOST
+    const options = {
+        headers: {
+            'x-rapidapi-key': process.env.API_KEY,
+            'x-rapidapi-host': process.env.API_HOST
+        },
+        timeout: 5000  // Timeout set to 5 seconds
     };
 
-    try {
-        const response = await axios.get(rapidapiurl, { headers });
-        if (!response.data) throw new Error('Empty API response');
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching player stats:', error);
-        throw error;
-    }
+    return new Promise((resolve, reject) => {
+        const req = https.get(rapidapiurl, options, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+                try {
+                    resolve(JSON.parse(data));
+                } catch (error) {
+                    reject(new Error('Error parsing JSON'));
+                }
+            });
+        });
+
+        req.on('error', reject);
+        req.on('timeout', () => {
+            req.abort();
+            reject(new Error('Request timed out'));
+        });
+    });
 };
 
 
