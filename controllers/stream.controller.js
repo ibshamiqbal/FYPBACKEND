@@ -32,7 +32,8 @@ const postStream = async (req, res) => {
 };
 
 
-const fetchStream = async (req, res) => {
+const 
+fetchStream = async (req, res) => {
     try {
         const streams = await Stream.find({});  
         

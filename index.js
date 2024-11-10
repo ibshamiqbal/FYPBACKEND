@@ -12,6 +12,7 @@ const { authRoute } = require('./routes/auth.route.js');
 const {streamRoute} = require('./routes/stream.route.js');
 const { h2hRoute } = require('./routes/h2h.route.js');
 const { userRoute } = require('./routes/user.route.js');
+const { playerRoute } = require('./routes/players.route.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -48,6 +49,7 @@ app.use('/h2h' , h2hRoute)
 
 app.use('/user' , userRoute)
 
+app.use('/player' , playerRoute)
 
 mongoose
     .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })

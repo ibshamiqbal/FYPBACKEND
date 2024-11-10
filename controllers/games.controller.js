@@ -25,8 +25,7 @@ const getGamesFromAPI = async (season, league) => {
 
 const getGames = async (req, res) => {
     const league = 12;
-    const season = "2021-2022";
-    // const date = "2019-11-26";
+    const season = "2024-2025";
 
     if (!season || !league ) {
         return res.status(400).send('Season and League parameters are required');

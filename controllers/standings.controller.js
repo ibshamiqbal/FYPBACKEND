@@ -21,7 +21,7 @@ const getStandingsFromAPI = async (league, season) => {
 
 const getStandings = async (req, res) => {
     const league = 12;
-    const season = "2019-2020";
+    const season = "2024-2025";
 
     if (!league || !season) {
         return res.status(400).send('League and season parameters are required');
