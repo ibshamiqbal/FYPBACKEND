@@ -3,18 +3,21 @@ const NewsModel = require('../models/news.model.js'); // Assuming `NewsModel` is
 const axios = require('axios');
 
 const getNewsFromAPI = async () => {
-    const rapidapiurl = 'https://wnba-api.p.rapidapi.com/wnba-news '; // Make sure this is correct
+    const rapidapiurl = 'https://wnba-api.p.rapidapi.com/wnba-news';
     const headers = {
         'x-rapidapi-key': process.env.NEWS_KEY,
         'x-rapidapi-host': process.env.NEWS_HOST
     };
 
     try {
-        const response = await axios.get(rapidapiurl, { headers });
-        console.log("Full API Response", response.data); // Log the response to check structure
+        const response = await axios.get(rapidapiurl, {
+            headers,
+            timeout: 5000 // Timeout set to 5 seconds
+        });
+        console.log(JSON.stringify(response.data));
         return response.data;
     } catch (error) {
-        console.error('Error fetching news:', error.message);
+        console.error('Error fetching news:', error);
         throw error;
     }
 };
