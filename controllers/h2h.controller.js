@@ -23,7 +23,7 @@ const getH2hFromAPI = async (h2h) => {
 
 const getH2h = async (req, res) => {
     
-    const h2h = "142-144";
+    const h2h = "142-146";
 
     if (!h2h) {
         return res.status(400).send('H2h is required');

@@ -25,6 +25,12 @@ const playerStatsSchema = new mongoose.Schema({
   lastGamePlayed: { type: String },
   playerID: { type: String },
   exp: { type: String },
+  injury: {
+    injReturnDate: { type: String },
+    description: { type: String },
+    injDate: { type: String },
+    designation: { type: String }
+  },
   stats: {
     blk: { type: String },
     fga: { type: String },

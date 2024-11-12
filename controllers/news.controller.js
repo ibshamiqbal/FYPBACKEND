@@ -3,7 +3,7 @@ const NewsModel = require('../models/news.model.js'); // Assuming `NewsModel` is
 const axios = require('axios');
 
 const getNewsFromAPI = async () => {
-    const rapidapiurl = 'https://wnba-api.p.rapidapi.com/wnba-news';
+    const rapidapiurl = 'https://wnba-api.p.rapidapi.com/wnba-news ';
     const headers = {
         'x-rapidapi-key': process.env.NEWS_KEY,
         'x-rapidapi-host': process.env.NEWS_HOST
