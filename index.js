@@ -15,6 +15,9 @@ const { userRoute } = require('./routes/user.route.js');
 const { playerRoute } = require('./routes/players.route.js');
 const { newsRoute } = require('./routes/news.route.js');
 const { liveScoreRoute } = require('./routes/livescore.route.js');
+const { teamRoute } = require('./routes/team.route.js');
+const { liveGameRoute } = require('./routes/livegame.route.js');
+const { liveChannelRoute } = require('./routes/liveChannel.route.js');
 
 
 const app = express();
@@ -56,7 +59,11 @@ app.use('/player' , playerRoute)
 
 app.use('/news' , newsRoute)
 
-//app.use('/livescore' , liveScoreRoute)
+app.use('/liveTeam' , teamRoute)
+
+app.use('/liveGame' , liveGameRoute)
+
+app.use('/liveChannel' , liveChannelRoute)
 
 
 
