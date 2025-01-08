@@ -7,7 +7,7 @@ const client = new MailtrapClient({
 });
 
 const sender = {
-  email: "mailtrap@paktag.store",
+  email: "mailtrap@satraders.co",
   name: "Mailtrap Test",
 };
 
