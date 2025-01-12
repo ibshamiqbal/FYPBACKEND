@@ -59,37 +59,48 @@ const signup = async(req, res)=>{
 
 const verifyEmail = async (req, res) => {
 	const { code } = req.body;
+
+	if (!code) {
+		return res.status(400).json({ success: false, message: "Verification code is required" });
+	}
+
 	try {
+		// Find the user with the provided verification code and ensure the token has not expired
 		const user = await User.findOne({
 			verificationToken: code,
-			// verificationTokenExpiresAt: { $gt: Date.now() },
+			verificationTokenExpiresAt: { $gt: Date.now() },
 		});
 
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid or expired verification code" });
 		}
 
+		// Update user as verified
 		user.isVerified = true;
 		user.verificationToken = undefined;
 		user.verificationTokenExpiresAt = undefined;
 		await user.save();
 
-		await sendWelcomeEmail(user.email, user.name);
+		// Attempt to send a welcome email
+		try {
+			await sendWelcomeEmail(user.email, user.name);
+		} catch (emailError) {
+			console.error("Error sending welcome email:", emailError.message);
+		}
+
+		// Return success response with user data (excluding sensitive fields)
+		const { password, verificationToken, verificationTokenExpiresAt, ...userSafeData } = user._doc;
 
 		res.status(200).json({
 			success: true,
 			message: "Email verified successfully",
-			user: {
-				...user._doc,
-				password: undefined,
-			},
+			user: userSafeData,
 		});
 	} catch (error) {
-		console.log("error in verifyEmail ", error);
+		console.error("Error in verifyEmail:", error);
 		res.status(500).json({ success: false, message: "Server error" });
 	}
 };
-
 
 const login = async (req, res) => {
 	const { email, password } = req.body;

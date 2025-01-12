@@ -1,10 +1,10 @@
 const { MailtrapClient } = require("mailtrap");
 
-const TOKEN = "a30369e5864a591dc78b7189320bd956";
-
 const client = new MailtrapClient({
-  token: TOKEN,
+  endpoint: process.env.MAILTRAP_ENDPOINT,
+  token: process.env.MAILTRAP_TOKEN,
 });
+
 
 const sender = {
   email: "mailtrap@satraders.co",
