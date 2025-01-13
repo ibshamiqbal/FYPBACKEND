@@ -6,14 +6,21 @@ const createLiveGames = async (req, res) => {
     const { team1, team2, score, channel, date, time, highlights, restriction } = req.body;
 
     // Validate required fields
-    if (!team1 || !team2 || !score || !channel || !date || !time || !highlights || !restriction) {
-        return res.status(400).send({ message: 'All fields are required' });
+    if (!team1 || !team2 || !score || !channel || !date || !time) {
+        return res.status(400).send({ message: 'Some required fields are missing' });
     }
 
     try {
         // Save the new live game
         const newLiveGame = new liveGame({
-            team1, team2, score, channel, date, time, highlights, restriction,
+            team1,
+            team2,
+            score,
+            channel,
+            date,
+            time,
+            highlights,
+            restriction,
         });
 
         const savedLiveGame = await newLiveGame.save();
@@ -23,7 +30,6 @@ const createLiveGames = async (req, res) => {
         res.status(500).send({ message: 'An error occurred while saving the live game' });
     }
 };
-
 // Fetch all live games
 const getLiveGames = async (req, res) => {
     try {
@@ -54,7 +60,6 @@ const deleteLiveGame = async (req, res) => {
     }
 };
 
-// Flip the live status of a game
 const flipLiveGame = async (req, res) => {
     const { id } = req.params;
 
@@ -62,16 +67,19 @@ const flipLiveGame = async (req, res) => {
         const flipGame = await liveGame.findById(id);
 
         if (!flipGame) {
-            return res.status(404).send({ message: 'Game not found' });
+            return res.status(404).send({ message: "Game not found" });
         }
 
         flipGame.live = !flipGame.live; // Toggle the live status
-        await flipGame.save();
+        const updatedGame = await flipGame.save();
 
-        res.status(200).send({ message: 'Game live status flipped successfully', flipGame });
+        res.status(200).send({
+            message: "Game live status flipped successfully",
+            flipGame: updatedGame,
+        });
     } catch (error) {
-        console.error('Error flipping live status:', error.message);
-        res.status(500).send({ message: 'An error occurred while flipping the live status' });
+        console.error("Error flipping live status:", error.message);
+        res.status(500).send({ message: "Error flipping live status" });
     }
 };
 

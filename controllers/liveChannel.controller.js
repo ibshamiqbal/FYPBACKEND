@@ -1,3 +1,4 @@
+const { Mongoose, default: mongoose } = require("mongoose");
 const LiveChannel = require("../models/livechannel.model");
 
 const createLiveChannel = async (req, res) => {
@@ -47,26 +48,36 @@ const getLiveChannels = async (req, res) => {
 };
 
 const deleteLiveChannel = async (req, res) => {
+  const { id } = req.params;
+
+  console.log('ID to delete:', id); // Debugging log
+
   try {
-    const { id } = req.params;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          console.log('Invalid ID format'); // Debugging log
+          return res.status(400).json({ message: "Invalid channel ID format" });
+      }
 
-    // Validate ID format (e.g., MongoDB ObjectId)
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid channel ID format" });
-    }
+      const deletedChannel = await LiveChannel.findByIdAndDelete(id);
 
-    // Attempt to delete the channel by ID
-    const deletedChannel = await LiveChannel.findByIdAndDelete(id);
+      console.log('Deleted Channel:', deletedChannel); // Debugging log
 
-    if (!deletedChannel) {
-      return res.status(404).json({ message: "Channel not found" });
-    }
+      if (!deletedChannel) {
+          return res.status(404).send({ message: 'Channel not found' });
+      }
 
-    res.status(200).json({ message: "Channel deleted successfully", deletedChannel });
+      res.status(200).send({
+          message: 'Channel deleted successfully',
+          deletedChannel,
+      });
   } catch (error) {
-    console.error("Error deleting live channel:", error.message);
-    res.status(500).json({ message: "An error occurred while deleting the channel" });
+      console.error('Error deleting channel:', error.message);
+      res.status(500).send({
+          message: 'An error occurred while deleting the channel',
+          error: error.message,
+      });
   }
 };
+
 
 module.exports = { createLiveChannel, getLiveChannels, deleteLiveChannel };

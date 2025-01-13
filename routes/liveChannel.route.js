@@ -6,4 +6,5 @@ liveChannelRoute.post('/create-LiveChannel', createLiveChannel);
 liveChannelRoute.get('/get-LiveChannels', getLiveChannels);
 liveChannelRoute.delete('/liveChannel/delete-LiveChannel/:id', deleteLiveChannel);
 
+
 module.exports = { liveChannelRoute };

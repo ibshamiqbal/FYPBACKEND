@@ -7,8 +7,8 @@ const liveGameSchema = new mongoose.Schema({
     channel: { type: String, required: true },
     date: { type: Date, required: true },
     time: { type: String, required: true },
-    highlights: { type: String, required: true },
-    restriction: { type: String, required: true },
+    highlights: { type: String },
+    restriction: { type: String },
     live: { type: Boolean , default : false },
 
 });
