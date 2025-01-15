@@ -3,42 +3,37 @@ const LiveChannel = require("../models/livechannel.model");
 
 const createLiveChannel = async (req, res) => {
   try {
-    const { name, livestream, origin, referer } = req.body;
+    const { name, livestream, origin, referer, useragent } = req.body;
 
-    // Log the incoming request body
-    console.log("Request Body Received:", req.body);
+    console.log("Request Body:", req.body); // Log the incoming request
 
-    // Input validation: Ensure all fields are present
-    if (!name || !livestream || !origin || !referer) {
+    if (!name || !livestream || !origin || !referer || !useragent) {
       console.log("Validation Error: Missing required fields");
-      return res.status(400).json({ message: "All fields (name, livestream, origin, referer) are required" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Create and save a new channel
-    const newChannel = new LiveChannel({ name, livestream, origin, referer });
+    const newChannel = new LiveChannel({ name, livestream, origin, referer, useragent });
     const savedChannel = await newChannel.save();
 
-    console.log("LiveChannel Saved Successfully:", savedChannel);
+    console.log("Saved Channel:", savedChannel); // Log the saved document
     res.status(201).json(savedChannel);
   } catch (error) {
     console.error("Error creating live channel:", error.message);
-    res.status(500).json({ message: "An error occurred while creating the channel" });
+    res.status(500).json({ message: "Error creating channel", error: error.message });
   }
 };
 
 const getLiveChannels = async (req, res) => {
   try {
-    // Fetch channels with a limit and handling for performance
     const channels = await LiveChannel.find({})
-      .select("name livestream origin referer") // Select specific fields for response
-      .limit(100) // Limit the number of records returned
-      .maxTimeMS(5000); // Set maximum execution time to 5 seconds
+      .select("name livestream origin referer useragent") // Include useragent in the response
+      .limit(100)
+      .maxTimeMS(5000);
 
     res.status(200).json(channels);
   } catch (error) {
     console.error("Error fetching live channels:", error.message);
 
-    // Handle timeout errors specifically
     if (error.code === 50) {
       return res.status(503).json({ message: "Server timeout: Query took too long" });
     }
